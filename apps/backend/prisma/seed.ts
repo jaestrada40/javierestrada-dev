@@ -93,6 +93,51 @@ async function main(): Promise<void> {
       }
     }
   }
+  const projects = [
+    {
+      name: 'Sistema de Parqueo USPG',
+      description:
+        'Módulo de gestión de parqueo universitario dentro de un ecosistema compartido entre grupos: control de espacios, reservas y roles de usuario sobre una base de datos PostgreSQL común.',
+      stack: 'Next.js, Prisma, PostgreSQL, TypeScript',
+      githubUrl: 'https://github.com/jaestrada40',
+      featured: true,
+      sortOrder: 0,
+    },
+    {
+      name: 'javierestrada.dev',
+      description:
+        'Esta misma página: sitio personal con panel de administración propio. Todo el contenido (perfil, skills, proyectos, blog) se edita sin tocar código.',
+      stack: 'Angular, NestJS, Prisma, PostgreSQL, Docker',
+      githubUrl: 'https://github.com/jaestrada40/javierestrada-dev',
+      demoUrl: 'https://javierestrada.dev',
+      featured: true,
+      sortOrder: 1,
+    },
+  ];
+  for (const p of projects) {
+    const exists = await prisma.project.findFirst({ where: { name: p.name } });
+    if (!exists) await prisma.project.create({ data: p });
+  }
+
+  const experience = [
+    {
+      kind: 'education',
+      title: 'Ingeniería en Sistemas',
+      organization: 'Universidad San Pablo de Guatemala',
+      startYear: 2022,
+      endYear: null,
+      description:
+        'Formación en desarrollo de software, bases de datos y arquitectura de sistemas. Proyectos en equipo sobre ecosistemas de servicios compartidos.',
+      sortOrder: 0,
+    },
+  ];
+  for (const e of experience) {
+    const exists = await prisma.experience.findFirst({
+      where: { title: e.title, organization: e.organization },
+    });
+    if (!exists) await prisma.experience.create({ data: e });
+  }
+
   console.log('Seed completado');
 }
 

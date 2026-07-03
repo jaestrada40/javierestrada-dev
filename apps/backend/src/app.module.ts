@@ -4,6 +4,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { CategoriesModule } from './categories/categories.module';
+import { ExperienceModule } from './experience/experience.module';
+import { PostsModule } from './posts/posts.module';
+import { ProjectsModule } from './projects/projects.module';
 import { SkillsModule } from './skills/skills.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProfileModule } from './profile/profile.module';
@@ -17,6 +20,9 @@ import { ProfileModule } from './profile/profile.module';
     ProfileModule,
     CategoriesModule,
     SkillsModule,
+    ProjectsModule,
+    ExperienceModule,
+    PostsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: ThrottlerGuard }],
 })

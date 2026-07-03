@@ -82,3 +82,21 @@ de Javier (Angular, NestJS, Next.js, TypeScript, Prisma, PostgreSQL, Docker, etc
 ## Fuera de alcance (YAGNI)
 
 - Blog, proyectos/portfolio, multi-usuario, i18n, analytics — se pueden agregar después.
+
+---
+
+## Ampliación (2 jul 2026) — aprobada por Javier: "todas las opciones"
+
+Nuevas secciones administrables: **Proyectos**, **Experiencia** (trabajo + formación), **Blog**.
+Además: avatar en el hero (campo ya existente), página `/cv` imprimible (botón "Descargar CV"
+usa print → PDF del navegador), meta tags Open Graph, favicon propio.
+
+Modelos nuevos: `project` (name, description, stack CSV, githubUrl?, demoUrl?, featured, sortOrder),
+`experience` (kind work|education, title, organization, startYear, endYear? null=actual, description, sortOrder),
+`post` (title, slug único, excerpt, content texto plano, published, publishedAt).
+
+API: GET públicos (`/api/projects`, `/api/experience`, `/api/posts`, `/api/posts/:slug` solo publicados),
+CRUD con JWT para cada uno. Admin: tres pantallas nuevas.
+
+Deploy: VPS Hostinger con Coolify (compose del repo, dominio javierestrada.dev, TLS por Coolify).
+Analytics: Umami vía one-click de Coolify (solo guía, sin código).
