@@ -6,7 +6,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      # Solo accesible desde la propia máquina (desarrollo); nunca expuesto a internet
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -16,8 +17,7 @@ services:
 
   backend:
     build: ./apps/backend
-    ports:
-      - "3000:3000"
+    # Sin ports: solo accesible por la red interna de Docker (nginx hace el proxy)
     env_file: .env
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public

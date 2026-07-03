@@ -51,8 +51,16 @@ const categories: { name: string; gradient: string; skills: SeedSkill[] }[] = [
 ];
 
 async function main(): Promise<void> {
-  const username = process.env.ADMIN_USERNAME ?? 'javier';
-  const password = process.env.ADMIN_PASSWORD ?? 'Admin1234!';
+  const username = process.env.ADMIN_USERNAME;
+  const password = process.env.ADMIN_PASSWORD;
+  if (!username || !password) {
+    throw new Error(
+      'ADMIN_USERNAME y ADMIN_PASSWORD deben estar definidas para correr el seed (sin defaults por seguridad)',
+    );
+  }
+  if (password.length < 10) {
+    throw new Error('ADMIN_PASSWORD debe tener al menos 10 caracteres');
+  }
   const hash = await bcrypt.hash(password, 10);
 
   await prisma.user.upsert({
