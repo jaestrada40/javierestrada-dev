@@ -1,0 +1,53 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Profile {
+  id          Int      @id @default(autoincrement())
+  name        String
+  tagline     String
+  bio         String
+  email       String
+  githubUrl   String?  @map("github_url")
+  linkedinUrl String?  @map("linkedin_url")
+  avatarUrl   String?  @map("avatar_url")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("profile")
+}
+
+model SkillCategory {
+  id        Int     @id @default(autoincrement())
+  name      String  @unique
+  gradient  String  @default("violet")
+  sortOrder Int     @default(0) @map("sort_order")
+  skills    Skill[]
+
+  @@map("skill_category")
+}
+
+model Skill {
+  id         Int           @id @default(autoincrement())
+  name       String
+  level      Int           @default(80)
+  icon       String?
+  featured   Boolean       @default(false)
+  sortOrder  Int           @default(0) @map("sort_order")
+  categoryId Int           @map("category_id")
+  category   SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("skill")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+
+  @@map("user")
+}
