@@ -1,13 +1,24 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { Profile } from '../../models';
 
 @Component({
   selector: 'app-hero',
+  imports: [RouterLink],
   template: `
     <header class="max-w-4xl mx-auto px-6 pt-24 pb-16">
-      <p class="font-mono text-sm text-ink-dim tracking-widest uppercase mb-6">
-        Perfil profesional
-      </p>
+      <div class="flex items-start justify-between gap-6">
+        <p class="font-mono text-sm text-ink-dim tracking-widest uppercase mb-6">
+          Perfil profesional
+        </p>
+        @if (profile().avatarUrl) {
+          <img
+            [src]="profile().avatarUrl"
+            [alt]="profile().name"
+            class="w-24 h-24 md:w-28 md:h-28 rounded-lg object-cover border border-navy-700"
+          />
+        }
+      </div>
 
       <h1
         class="font-black text-ink leading-none tracking-tight"
@@ -58,6 +69,12 @@ import { Profile } from '../../models';
           class="px-5 py-2.5 rounded-md border border-navy-700 text-ink font-semibold hover:border-accent hover:text-accent transition-colors"
         >
           Contacto
+        </a>
+        <a
+          routerLink="/cv"
+          class="px-5 py-2.5 rounded-md border border-navy-700 font-mono text-sm text-ink-dim hover:border-accent hover:text-accent transition-colors"
+        >
+          Descargar CV
         </a>
       </div>
     </header>

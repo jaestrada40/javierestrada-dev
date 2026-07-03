@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Profile, Skill, SkillCategory } from '../../models';
+import { Experience, Post, Profile, Project, Skill, SkillCategory } from '../../models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -43,5 +43,73 @@ export class ApiService {
 
   deleteSkill(id: number): Observable<Skill> {
     return this.http.delete<Skill>(`/api/skills/${id}`);
+  }
+
+  getProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>('/api/projects');
+  }
+
+  createProject(data: Partial<Project> & { name: string; description: string; stack: string }): Observable<Project> {
+    return this.http.post<Project>('/api/projects', data);
+  }
+
+  updateProject(id: number, data: Partial<Project>): Observable<Project> {
+    const { name, description, stack, githubUrl, demoUrl, featured, sortOrder } = data;
+    return this.http.patch<Project>(`/api/projects/${id}`, {
+      name, description, stack,
+      githubUrl: githubUrl || undefined,
+      demoUrl: demoUrl || undefined,
+      featured, sortOrder,
+    });
+  }
+
+  deleteProject(id: number): Observable<Project> {
+    return this.http.delete<Project>(`/api/projects/${id}`);
+  }
+
+  getExperience(): Observable<Experience[]> {
+    return this.http.get<Experience[]>('/api/experience');
+  }
+
+  createExperience(data: Partial<Experience> & { kind: string; title: string; organization: string; startYear: number; description: string }): Observable<Experience> {
+    return this.http.post<Experience>('/api/experience', data);
+  }
+
+  updateExperience(id: number, data: Partial<Experience>): Observable<Experience> {
+    const { kind, title, organization, startYear, endYear, description, sortOrder } = data;
+    return this.http.patch<Experience>(`/api/experience/${id}`, {
+      kind, title, organization, startYear,
+      endYear: endYear ?? undefined,
+      description, sortOrder,
+    });
+  }
+
+  deleteExperience(id: number): Observable<Experience> {
+    return this.http.delete<Experience>(`/api/experience/${id}`);
+  }
+
+  getPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>('/api/posts');
+  }
+
+  getPost(slug: string): Observable<Post> {
+    return this.http.get<Post>(`/api/posts/${slug}`);
+  }
+
+  getAllPosts(): Observable<Post[]> {
+    return this.http.get<Post[]>('/api/posts/all');
+  }
+
+  createPost(data: { title: string; excerpt: string; content: string; published?: boolean }): Observable<Post> {
+    return this.http.post<Post>('/api/posts', data);
+  }
+
+  updatePost(id: number, data: Partial<Post>): Observable<Post> {
+    const { title, excerpt, content, published } = data;
+    return this.http.patch<Post>(`/api/posts/${id}`, { title, excerpt, content, published });
+  }
+
+  deletePost(id: number): Observable<Post> {
+    return this.http.delete<Post>(`/api/posts/${id}`);
   }
 }

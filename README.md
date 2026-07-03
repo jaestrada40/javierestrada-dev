@@ -37,8 +37,26 @@ docker compose up --build -d
 - La primera vez, ejecutar el seed: `docker compose exec backend npx prisma db seed`
   (requiere ts-node; alternativamente correr el seed desde local apuntando `DATABASE_URL` al contenedor).
 
-Para publicar en `javierestrada.dev`: apuntar el DNS al servidor y poner un reverse proxy
-con TLS (Caddy o nginx + certbot) delante del puerto 8080.
+## Deploy con Coolify (VPS Hostinger)
+
+1. En Coolify: **+ New → Resource → Docker Compose**, conectar este repo de GitHub
+   (`jaestrada40/javierestrada-dev`, rama `main`). Coolify detecta `docker-compose.yml`.
+2. En **Environment Variables** del recurso, definir las mismas variables de `.env.example`
+   (`POSTGRES_*`, `JWT_SECRET` nuevo con `openssl rand -hex 32`, `ADMIN_USERNAME`,
+   `ADMIN_PASSWORD` fuerte).
+3. En el servicio **frontend**, asignar el dominio `javierestrada.dev` (puerto interno 80).
+   Coolify emite el certificado TLS automáticamente. Quitar los `ports` públicos de
+   postgres/backend si no se necesitan fuera.
+4. Deploy. Las migraciones corren solas al arrancar el backend.
+5. Primera vez: abrir terminal del contenedor backend en Coolify y correr
+   `npx prisma db seed` (o insertar el admin manualmente).
+6. Auto-deploy: activar la opción de webhook de GitHub en Coolify para que cada push a
+   `main` despliegue solo.
+
+### Analytics (opcional)
+
+En Coolify: **+ New → Service → Umami**, asignarle un subdominio (ej. `stats.javierestrada.dev`),
+crear el sitio en Umami y pegar su `<script>` de tracking en `apps/frontend/src/index.html`.
 
 ## Panel admin
 

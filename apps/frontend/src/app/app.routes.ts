@@ -7,6 +7,18 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
   },
   {
+    path: 'blog',
+    loadComponent: () => import('./features/blog/blog-list.component').then((m) => m.BlogListComponent),
+  },
+  {
+    path: 'blog/:slug',
+    loadComponent: () => import('./features/blog/blog-post.component').then((m) => m.BlogPostComponent),
+  },
+  {
+    path: 'cv',
+    loadComponent: () => import('./features/cv/cv.component').then((m) => m.CvComponent),
+  },
+  {
     path: 'admin/login',
     loadComponent: () =>
       import('./features/admin/login/login.component').then((m) => m.LoginComponent),
@@ -29,6 +41,27 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/skills-admin/skills-admin.component').then(
             (m) => m.SkillsAdminComponent,
+          ),
+      },
+      {
+        path: 'projects',
+        loadComponent: () =>
+          import('./features/admin/projects-admin/projects-admin.component').then(
+            (m) => m.ProjectsAdminComponent,
+          ),
+      },
+      {
+        path: 'experience',
+        loadComponent: () =>
+          import('./features/admin/experience-admin/experience-admin.component').then(
+            (m) => m.ExperienceAdminComponent,
+          ),
+      },
+      {
+        path: 'posts',
+        loadComponent: () =>
+          import('./features/admin/posts-admin/posts-admin.component').then(
+            (m) => m.PostsAdminComponent,
           ),
       },
     ],

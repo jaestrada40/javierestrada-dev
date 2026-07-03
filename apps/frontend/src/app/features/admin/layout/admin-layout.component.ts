@@ -22,6 +22,24 @@ import { AuthService } from '../../../core/services/auth.service';
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Skills</a
         >
+        <a
+          routerLink="/admin/projects"
+          routerLinkActive="bg-slate-800 text-white"
+          class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
+          >Proyectos</a
+        >
+        <a
+          routerLink="/admin/experience"
+          routerLinkActive="bg-slate-800 text-white"
+          class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
+          >Experiencia</a
+        >
+        <a
+          routerLink="/admin/posts"
+          routerLinkActive="bg-slate-800 text-white"
+          class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
+          >Blog</a
+        >
         <a routerLink="/" class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900">Ver sitio</a>
         <button
           type="button"

@@ -27,6 +27,39 @@ export interface SkillCategory {
   skills: Skill[];
 }
 
+export interface Project {
+  id: number;
+  name: string;
+  description: string;
+  stack: string;
+  githubUrl: string | null;
+  demoUrl: string | null;
+  featured: boolean;
+  sortOrder: number;
+}
+
+export interface Experience {
+  id: number;
+  kind: 'work' | 'education';
+  title: string;
+  organization: string;
+  startYear: number;
+  endYear: number | null;
+  description: string;
+  sortOrder: number;
+}
+
+export interface Post {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  published: boolean;
+  publishedAt: string | null;
+  createdAt: string;
+}
+
 export type Gradient = 'violet' | 'sunset' | 'ocean' | 'lime' | 'candy';
 
 export const GRADIENT_CLASSES: Record<string, string> = {
