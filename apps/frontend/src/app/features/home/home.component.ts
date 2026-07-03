@@ -19,9 +19,7 @@ import { SkillsSectionComponent } from './skills-section.component';
       </div>
     } @else {
       <div class="min-h-screen flex items-center justify-center">
-        <div class="gradient-text bg-gradient-to-r from-fuchsia-400 to-cyan-400 text-2xl font-bold">
-          Cargando…
-        </div>
+        <div class="font-mono text-ink-dim">Cargando…</div>
       </div>
     }
   `,

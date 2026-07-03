@@ -36,7 +36,7 @@ interface SkillDraft {
         type="button"
         (click)="addCategory()"
         [disabled]="!newCategoryName.trim()"
-        class="rounded-lg bg-gradient-to-r from-fuchsia-500 to-purple-600 px-4 py-2 font-semibold text-white disabled:opacity-50"
+        class="rounded-lg bg-accent px-4 py-2 font-semibold text-navy-950 disabled:opacity-50"
       >
         + Categoría
       </button>

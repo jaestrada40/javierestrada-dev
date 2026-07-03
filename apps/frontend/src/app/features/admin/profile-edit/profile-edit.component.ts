@@ -33,7 +33,7 @@ import { ApiService } from '../../../core/services/api.service';
         <button
           type="submit"
           [disabled]="form.invalid || saving()"
-          class="rounded-lg bg-gradient-to-r from-fuchsia-500 to-purple-600 px-5 py-2.5 font-semibold text-white disabled:opacity-50"
+          class="rounded-lg bg-accent px-5 py-2.5 font-semibold text-navy-950 disabled:opacity-50"
         >
           {{ saving() ? 'Guardando…' : 'Guardar' }}
         </button>

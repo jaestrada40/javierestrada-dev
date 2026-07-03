@@ -1,60 +1,49 @@
 import { Component, input } from '@angular/core';
-import { GRADIENT_CLASSES, SkillCategory } from '../../models';
+import { SkillCategory } from '../../models';
 import { RevealDirective } from '../../shared/reveal.directive';
 
 @Component({
   selector: 'app-skills-section',
   imports: [RevealDirective],
   template: `
-    <section id="skills" class="relative max-w-6xl mx-auto px-6 py-24">
+    <section id="skills" class="max-w-4xl mx-auto px-6 py-12">
       <h2
-        class="text-center font-black mb-20"
-        style="font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 4rem)"
+        class="font-bold text-ink text-2xl mb-12 tracking-tight"
+        style="font-family: var(--font-display)"
       >
-        <span class="gradient-text bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-amber-300">
-          Skills & Tecnologías
-        </span>
+        Skills & Tecnologías
       </h2>
 
       @for (category of categories(); track category.id) {
-        <div class="mb-20" appReveal>
-          <h3
-            class="text-2xl md:text-3xl font-bold mb-8 inline-block gradient-text bg-gradient-to-r"
-            [class]="'text-2xl md:text-3xl font-bold mb-8 inline-block gradient-text bg-gradient-to-r ' + gradientClass(category.gradient)"
-            style="font-family: var(--font-display)"
-          >
-            {{ category.name }}
-          </h3>
+        <div class="mb-14" appReveal>
+          <div class="border-t border-navy-700 pt-3 mb-6">
+            <h3 class="font-mono text-sm tracking-widest uppercase text-ink-dim">
+              {{ category.name }}
+            </h3>
+          </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
             @for (skill of category.skills; track skill.id) {
-              <div
-                class="group relative rounded-2xl bg-slate-900/80 border border-slate-800 p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-600 hover:shadow-xl"
-              >
-                <div
-                  class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-15 transition-opacity bg-gradient-to-br pointer-events-none"
-                  [class]="'absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-15 transition-opacity bg-gradient-to-br pointer-events-none ' + gradientClass(category.gradient)"
-                ></div>
-
-                <div class="flex items-center gap-4 mb-4">
-                  @if (skill.icon) {
-                    <i [class]="'devicon-' + skill.icon + '-plain colored text-4xl'"></i>
-                  }
-                  <div>
-                    <p class="font-semibold text-lg text-slate-100">{{ skill.name }}</p>
-                    @if (skill.featured) {
-                      <span class="text-xs font-medium text-amber-300">★ Destacada</span>
-                    }
+              <div class="flex items-center gap-4">
+                @if (skill.icon) {
+                  <i [class]="'devicon-' + skill.icon + '-plain text-2xl text-ink-dim'"></i>
+                }
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-baseline justify-between mb-1.5">
+                    <p class="font-medium text-ink truncate">
+                      {{ skill.name }}
+                      @if (skill.featured) {
+                        <span class="ml-2 font-mono text-[10px] uppercase tracking-wider text-accent border border-navy-700 rounded px-1.5 py-0.5 align-middle">Principal</span>
+                      }
+                    </p>
+                    <span class="font-mono text-xs text-ink-dim ml-3">{{ skill.level }}</span>
                   </div>
-                  <span class="ml-auto text-sm font-mono text-slate-400">{{ skill.level }}%</span>
-                </div>
-
-                <div class="h-2 rounded-full bg-slate-800 overflow-hidden">
-                  <div
-                    class="h-full rounded-full bg-gradient-to-r transition-all duration-1000"
-                    [class]="'h-full rounded-full bg-gradient-to-r transition-all duration-1000 ' + gradientClass(category.gradient)"
-                    [style.width.%]="skill.level"
-                  ></div>
+                  <div class="h-px bg-navy-700 relative">
+                    <div
+                      class="absolute inset-y-0 left-0 h-[3px] -top-[1px] bg-accent transition-all duration-700"
+                      [style.width.%]="skill.level"
+                    ></div>
+                  </div>
                 </div>
               </div>
             }
@@ -66,8 +55,4 @@ import { RevealDirective } from '../../shared/reveal.directive';
 })
 export class SkillsSectionComponent {
   readonly categories = input.required<SkillCategory[]>();
-
-  gradientClass(gradient: string): string {
-    return GRADIENT_CLASSES[gradient] ?? GRADIENT_CLASSES['violet'];
-  }
 }
