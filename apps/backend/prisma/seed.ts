@@ -69,7 +69,7 @@ async function main(): Promise<void> {
         tagline: 'Desarrollador Full Stack',
         bio: 'Construyo aplicaciones web modernas con Angular, NestJS y más. Apasionado por crear productos con buen diseño y código limpio.',
         email: 'javiera.estradag@gmail.com',
-        githubUrl: 'https://github.com/ElChaviSPG',
+        githubUrl: 'https://github.com/jaestrada40',
       },
     });
   }
