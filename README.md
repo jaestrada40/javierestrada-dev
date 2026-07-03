@@ -33,9 +33,9 @@ docker compose up --build -d
 ```
 
 - Sitio: http://localhost:8080 (nginx sirve Angular y proxy `/api` al backend)
-- Las migraciones se aplican automáticamente al arrancar el backend.
-- La primera vez, ejecutar el seed: `docker compose exec backend npx prisma db seed`
-  (requiere ts-node; alternativamente correr el seed desde local apuntando `DATABASE_URL` al contenedor).
+- Las migraciones y el seed se aplican automáticamente en cada arranque del backend
+  (el seed es idempotente: solo crea lo que falta, nunca duplica ni pisa ediciones hechas
+  desde el panel admin).
 
 ## Deploy con Coolify (VPS Hostinger)
 
@@ -47,10 +47,9 @@ docker compose up --build -d
 3. En el servicio **frontend**, asignar el dominio `javierestrada.dev` (puerto interno 80).
    Coolify emite el certificado TLS automáticamente. Quitar los `ports` públicos de
    postgres/backend si no se necesitan fuera.
-4. Deploy. Las migraciones corren solas al arrancar el backend.
-5. Primera vez: abrir terminal del contenedor backend en Coolify y correr
-   `npx prisma db seed` (o insertar el admin manualmente).
-6. Auto-deploy: activar la opción de webhook de GitHub en Coolify para que cada push a
+4. Deploy. Migraciones y seed corren solos al arrancar el backend (idempotente, seguro
+   en cada deploy).
+5. Auto-deploy: activar la opción de webhook de GitHub en Coolify para que cada push a
    `main` despliegue solo.
 
 ### Analytics (opcional)
