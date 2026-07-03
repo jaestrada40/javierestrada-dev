@@ -18,17 +18,21 @@ services:
   backend:
     build: ./apps/backend
     # Sin ports: solo accesible por la red interna de Docker (nginx hace el proxy)
-    env_file: .env
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN}
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      PORT: 3000
     depends_on:
       postgres:
         condition: service_healthy
 
   frontend:
     build: ./apps/frontend
-    ports:
-      - "8080:80"
+    # Sin ports: Coolify enruta por su proxy interno usando el dominio asignado (puerto 80)
     depends_on:
       - backend
 
