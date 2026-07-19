@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#0c1424"/>
-  <text x="32" y="43" font-family="Archivo, Arial, sans-serif" font-size="30" font-weight="800" fill="#5b9dff" text-anchor="middle">JE</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Javier Estrada">
+  <rect width="64" height="64" rx="16" fill="#167A5B"/>
+  <path d="M48 0h16v16L48 0Z" fill="#2563EB"/>
+  <path fill="#FFFFFF" d="M14 18h15v6h-4v14c0 7-4 10-10 10-2 0-4-.4-6-1.3l2.2-5.4c1.1.5 2.1.7 3.1.7 2.5 0 3.7-1.4 3.7-4V24h-4v-6Zm20 0h21v6H41v5.5h12v6H41V42h14v6H34V18Z"/>
 </svg>
