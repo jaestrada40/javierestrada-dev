@@ -4,7 +4,7 @@ import { Profile } from '../../models';
 @Component({
   selector: 'app-footer',
   template: `
-    <footer class="max-w-4xl mx-auto px-6 py-12">
+    <footer class="max-w-6xl mx-auto px-6 py-12">
       <div class="border-t border-navy-700 pt-6 flex flex-wrap items-center justify-between gap-4">
         <p class="font-mono text-sm text-ink-dim">javierestrada.dev · {{ year }}</p>
         <div class="flex gap-6 font-mono text-sm text-ink-dim">

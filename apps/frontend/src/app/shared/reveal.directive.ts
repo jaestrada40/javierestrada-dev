@@ -9,6 +9,8 @@ export class RevealDirective implements OnInit, OnDestroy {
   private observer?: IntersectionObserver;
 
   ngOnInit(): void {
+    if (!('IntersectionObserver' in window)) return;
+    this.el.nativeElement.classList.add('reveal-pending');
     this.observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

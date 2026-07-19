@@ -6,52 +6,29 @@ import { Profile } from '../../models';
   selector: 'app-hero',
   imports: [RouterLink],
   template: `
-    <header class="max-w-4xl mx-auto px-6 pt-24 pb-16">
-      <div class="flex items-start justify-between gap-6">
-        <p class="font-mono text-sm text-ink-dim tracking-widest uppercase mb-6">
-          Perfil profesional
-        </p>
-        @if (profile().avatarUrl) {
-          <img
-            [src]="profile().avatarUrl"
-            [alt]="profile().name"
-            class="w-24 h-24 md:w-28 md:h-28 rounded-lg object-cover border border-navy-700"
-          />
-        }
-      </div>
-
-      <h1
-        class="font-black text-ink leading-none tracking-tight"
-        style="font-family: var(--font-display); font-size: clamp(2.8rem, 8vw, 5.5rem)"
-      >
-        {{ profile().name }}
-      </h1>
-
-      <!-- Doble filete de membrete -->
-      <div class="mt-8 border-t-2 border-navy-700"></div>
-      <div class="mt-1 border-t border-navy-700"></div>
-
-      <div class="mt-4 flex flex-wrap gap-x-8 gap-y-2 font-mono text-sm text-ink-dim">
-        <span class="text-accent">{{ profile().tagline }}</span>
-        <span>Guatemala</span>
-        <a [href]="'mailto:' + profile().email" class="hover:text-ink transition-colors">
-          {{ profile().email }}
-        </a>
-      </div>
-
-      <p class="mt-10 text-lg text-ink-dim leading-relaxed max-w-2xl">
-        {{ profile().bio }}
-      </p>
-
-      <div class="mt-10 flex items-center gap-3 flex-wrap">
+    <header>
+      <nav class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between border-b border-navy-700">
+        <a href="#inicio" class="font-display font-bold text-lg tracking-tight">Javier Estrada<span class="text-accent">.</span></a>
+        <div class="hidden md:flex gap-7 text-sm text-ink-dim">
+          <a href="#proyectos" class="hover:text-accent">Proyectos</a><a href="#skills" class="hover:text-accent">Tecnologías</a><a href="#certificaciones" class="hover:text-accent">Certificaciones</a><a href="#experiencia" class="hover:text-accent">Experiencia</a>
+        </div>
+      </nav>
+      <div id="inicio" class="max-w-6xl mx-auto px-6 py-20 md:py-28 grid md:grid-cols-[1.35fr_.65fr] gap-14 items-center">
+        <div>
+          <p class="font-mono text-xs text-accent tracking-[.2em] uppercase mb-6">Full-Stack Developer · Guatemala</p>
+          <h1 class="font-display font-bold text-ink leading-[.94] tracking-[-.055em] max-w-4xl" style="font-size: clamp(3.2rem, 7.3vw, 6.6rem)">
+            Construyo software <span class="text-ink-dim">que trabaja contigo.</span>
+          </h1>
+          <p class="mt-8 text-lg text-ink-dim leading-relaxed max-w-2xl">{{ profile().bio }}</p>
+          <div class="mt-9 flex items-center gap-3 flex-wrap">
         @if (profile().githubUrl) {
           <a
             [href]="profile().githubUrl"
             target="_blank"
             rel="noopener"
-            class="px-5 py-2.5 rounded-md bg-accent text-navy-950 font-semibold hover:opacity-90 transition-opacity"
+            class="px-5 py-3 rounded-lg bg-accent text-white font-semibold hover:brightness-90 transition"
           >
-            GitHub
+            Ver proyectos
           </a>
         }
         @if (profile().linkedinUrl) {
@@ -59,23 +36,31 @@ import { Profile } from '../../models';
             [href]="profile().linkedinUrl"
             target="_blank"
             rel="noopener"
-            class="px-5 py-2.5 rounded-md border border-navy-700 text-ink font-semibold hover:border-accent hover:text-accent transition-colors"
+            class="px-5 py-3 rounded-lg border border-navy-700 bg-white text-ink font-semibold hover:border-accent hover:text-accent transition-colors"
           >
             LinkedIn
           </a>
         }
         <a
           [href]="'mailto:' + profile().email"
-          class="px-5 py-2.5 rounded-md border border-navy-700 text-ink font-semibold hover:border-accent hover:text-accent transition-colors"
+          class="px-5 py-3 rounded-lg border border-navy-700 bg-white text-ink font-semibold hover:border-accent hover:text-accent transition-colors"
         >
           Contacto
         </a>
         <a
           routerLink="/cv"
-          class="px-5 py-2.5 rounded-md border border-navy-700 font-mono text-sm text-ink-dim hover:border-accent hover:text-accent transition-colors"
+          class="px-5 py-3 rounded-lg border border-navy-700 bg-white font-mono text-sm text-ink-dim hover:border-accent hover:text-accent transition-colors"
         >
           Descargar CV
         </a>
+          </div>
+        </div>
+        <div class="justify-self-center md:justify-self-end">
+          <div class="w-60 h-60 md:w-72 md:h-72 rounded-full bg-accent-soft p-3 ring-1 ring-navy-700 shadow-[0_24px_70px_rgba(28,70,55,.13)]">
+            @if (profile().avatarUrl) {<img [src]="profile().avatarUrl" [alt]="profile().name" class="w-full h-full rounded-full object-cover" />} @else {<div class="w-full h-full rounded-full grid place-items-center font-display text-6xl text-accent">JE</div>}
+          </div>
+          <p class="font-mono text-xs text-ink-dim text-center mt-5">{{ profile().tagline }}</p>
+        </div>
       </div>
     </header>
   `,

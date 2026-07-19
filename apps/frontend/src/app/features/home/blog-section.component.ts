@@ -9,10 +9,10 @@ import { RevealDirective } from '../../shared/reveal.directive';
   imports: [RouterLink, DatePipe, RevealDirective],
   template: `
     @if (posts().length) {
-      <section id="blog" class="max-w-4xl mx-auto px-6 py-12">
+      <section id="blog" class="max-w-6xl mx-auto px-6 py-16">
         <div class="flex items-baseline justify-between mb-12">
           <h2
-            class="font-bold text-ink text-2xl tracking-tight"
+            class="font-bold text-ink text-3xl tracking-tight"
             style="font-family: var(--font-display)"
           >
             Blog

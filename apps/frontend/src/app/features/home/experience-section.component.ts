@@ -7,9 +7,9 @@ import { RevealDirective } from '../../shared/reveal.directive';
   imports: [RevealDirective],
   template: `
     @if (items().length) {
-      <section id="experiencia" class="max-w-4xl mx-auto px-6 py-12">
+      <section id="experiencia" class="max-w-6xl mx-auto px-6 py-16">
         <h2
-          class="font-bold text-ink text-2xl mb-12 tracking-tight"
+          class="font-bold text-ink text-3xl mb-12 tracking-tight"
           style="font-family: var(--font-display)"
         >
           Experiencia & Formación

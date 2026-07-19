@@ -7,6 +7,7 @@ import { FooterComponent } from './footer.component';
 import { HeroComponent } from './hero.component';
 import { ProjectsSectionComponent } from './projects-section.component';
 import { SkillsSectionComponent } from './skills-section.component';
+import { CertificationsSectionComponent } from './certifications-section.component';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,7 @@ import { SkillsSectionComponent } from './skills-section.component';
     HeroComponent,
     ProjectsSectionComponent,
     SkillsSectionComponent,
+    CertificationsSectionComponent,
     ExperienceSectionComponent,
     BlogSectionComponent,
     FooterComponent,
@@ -23,6 +25,7 @@ import { SkillsSectionComponent } from './skills-section.component';
       <app-hero [profile]="p" />
       <app-projects-section [projects]="projects()" />
       <app-skills-section [categories]="categories()" />
+      <app-certifications-section />
       <app-experience-section [items]="experience()" />
       <app-blog-section [posts]="posts()" />
       <app-footer [profile]="p" />

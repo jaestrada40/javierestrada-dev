@@ -6,9 +6,9 @@ import { RevealDirective } from '../../shared/reveal.directive';
   selector: 'app-skills-section',
   imports: [RevealDirective],
   template: `
-    <section id="skills" class="max-w-4xl mx-auto px-6 py-12">
+    <section id="skills" class="max-w-6xl mx-auto px-6 py-16">
       <h2
-        class="font-bold text-ink text-2xl mb-12 tracking-tight"
+        class="font-bold text-ink text-3xl mb-12 tracking-tight"
         style="font-family: var(--font-display)"
       >
         Skills & Tecnologías
@@ -17,7 +17,7 @@ import { RevealDirective } from '../../shared/reveal.directive';
       @for (category of categories(); track category.id) {
         <div class="mb-14" appReveal>
           <div class="border-t border-navy-700 pt-3 mb-6">
-            <h3 class="font-mono text-sm tracking-widest uppercase text-ink-dim">
+            <h3 class="font-mono text-xs tracking-[.2em] uppercase text-accent">
               {{ category.name }}
             </h3>
           </div>
