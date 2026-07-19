@@ -78,7 +78,13 @@ async function main(): Promise<void> {
         bio: 'Construyo aplicaciones web modernas con Angular, NestJS y más. Apasionado por crear productos con buen diseño y código limpio.',
         email: 'javiera.estradag@gmail.com',
         githubUrl: 'https://github.com/jaestrada40',
+        avatarUrl: '/javier-avatar.png',
       },
+    });
+  } else {
+    await prisma.profile.update({
+      where: { id: existingProfile.id },
+      data: { avatarUrl: '/javier-avatar.png' },
     });
   }
 
@@ -121,6 +127,30 @@ async function main(): Promise<void> {
       featured: true,
       sortOrder: 1,
     },
+    {
+      name: 'Aplicación móvil de comercio electrónico',
+      description:
+        'Aplicación completa conectada a las API REST de WooCommerce, con catálogo de productos, carrito, checkout y autenticación. Entregada en un ciclo de desarrollo de ocho semanas.',
+      stack: 'Flutter, WooCommerce, REST API',
+      featured: true,
+      sortOrder: 2,
+    },
+    {
+      name: 'Herramientas de automatización gubernamental',
+      description:
+        'Scripts y servicios backend internos para automatizar reportes de datos, reducir tareas manuales y mejorar la operación de procesos financieros.',
+      stack: 'C#, SQL Server, Automatización',
+      featured: true,
+      sortOrder: 3,
+    },
+    {
+      name: 'Plataformas web internas',
+      description:
+        'Sistemas seguros para seguimiento financiero y comunicación interna entre dependencias gubernamentales.',
+      stack: 'C#, PHP, Oracle, PostgreSQL',
+      featured: false,
+      sortOrder: 4,
+    },
   ];
   for (const p of projects) {
     const exists = await prisma.project.findFirst({ where: { name: p.name } });
@@ -129,6 +159,36 @@ async function main(): Promise<void> {
 
   const experience = [
     {
+      kind: 'work',
+      title: 'Desarrollador de Software',
+      organization: 'Ministerio de Finanzas Públicas de Guatemala',
+      startYear: 2014,
+      endYear: null,
+      description:
+        'Desarrollo y mantenimiento de aplicaciones web internas; automatización de pruebas y herramientas backend con C# y SQL Server; participación en el diseño UI/UX y de base de datos de una aplicación móvil para procesos financieros. Administración de entornos Oracle y PostgreSQL, y soporte de sistemas heredados en PHP.',
+      sortOrder: 0,
+    },
+    {
+      kind: 'work',
+      title: 'Asistente de Tecnologías de la Información',
+      organization: 'Tropigas de Guatemala, S.A.',
+      startYear: 2009,
+      endYear: 2012,
+      description:
+        'Soporte de mantenimiento de hardware, configuración de redes y resolución de incidencias. Colaboración en el desarrollo de sistemas internos de escritorio y aplicaciones web.',
+      sortOrder: 1,
+    },
+    {
+      kind: 'work',
+      title: 'Gerente de Tecnologías de la Información',
+      organization: 'International Holdings, S.A.',
+      startYear: 2007,
+      endYear: 2009,
+      description:
+        'Administración de servidores y supervisión del desarrollo de sistemas internos. Gestión de sitios web corporativos y herramientas digitales para las operaciones diarias.',
+      sortOrder: 2,
+    },
+    {
       kind: 'education',
       title: 'Ingeniería en Sistemas',
       organization: 'Universidad San Pablo de Guatemala',
@@ -136,7 +196,7 @@ async function main(): Promise<void> {
       endYear: null,
       description:
         'Formación en desarrollo de software, bases de datos y arquitectura de sistemas. Proyectos en equipo sobre ecosistemas de servicios compartidos.',
-      sortOrder: 0,
+      sortOrder: 3,
     },
   ];
   for (const e of experience) {
