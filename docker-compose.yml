@@ -5,15 +5,17 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      # Solo accesible desde la propia máquina (desarrollo); nunca expuesto a internet
-      - "127.0.0.1:5432:5432"
+    # PostgreSQL solo se expone dentro de la red de Docker. Evitar un puerto
+    # fijo en el host permite que Coolify inicie la nueva versión mientras la
+    # anterior todavía está activa durante un redeploy.
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
+      timeout: 5s
       retries: 10
+      start_period: 10s
 
   backend:
     build: ./apps/backend
@@ -35,6 +37,12 @@ services:
     # Sin ports: Coolify enruta por su proxy interno usando el dominio asignado (puerto 80)
     depends_on:
       - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   pgdata:
