@@ -6,43 +6,44 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-admin-layout',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
-    <div class="min-h-screen bg-slate-950 flex">
-      <aside class="w-56 shrink-0 border-r border-slate-800 p-5 flex flex-col gap-1">
-        <p class="font-bold text-lg mb-4" style="font-family: var(--font-display)">Panel</p>
+    <div class="admin-theme min-h-screen bg-slate-950 text-slate-100 flex">
+      <aside class="w-60 shrink-0 border-r border-slate-700/70 bg-slate-950 p-5 flex flex-col gap-1 shadow-xl shadow-black/10">
+        <p class="font-bold text-xl text-white mb-1" style="font-family: var(--font-display)">Panel</p>
+        <p class="font-mono text-[10px] uppercase tracking-[.18em] text-emerald-400 mb-5">javierestrada.dev</p>
         <a
           routerLink="/admin"
           [routerLinkActiveOptions]="{ exact: true }"
-          routerLinkActive="bg-slate-800 text-white"
+          routerLinkActive="bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-500/40"
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Perfil</a
         >
         <a
           routerLink="/admin/skills"
-          routerLinkActive="bg-slate-800 text-white"
+          routerLinkActive="bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-500/40"
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Skills</a
         >
         <a
           routerLink="/admin/projects"
-          routerLinkActive="bg-slate-800 text-white"
+          routerLinkActive="bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-500/40"
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Proyectos</a
         >
         <a
           routerLink="/admin/experience"
-          routerLinkActive="bg-slate-800 text-white"
+          routerLinkActive="bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-500/40"
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Experiencia</a
         >
         <a
           routerLink="/admin/posts"
-          routerLinkActive="bg-slate-800 text-white"
+          routerLinkActive="bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-500/40"
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Blog</a
         >
         <a
           routerLink="/admin/security"
-          routerLinkActive="bg-slate-800 text-white"
+          routerLinkActive="bg-emerald-500/15 text-emerald-100 ring-1 ring-emerald-500/40"
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Seguridad</a
         >
@@ -55,7 +56,7 @@ import { AuthService } from '../../../core/services/auth.service';
           Salir
         </button>
       </aside>
-      <main class="flex-1 p-8 max-w-4xl">
+      <main class="flex-1 p-8 md:p-10 max-w-5xl bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,.07),transparent_28rem)]">
         <router-outlet />
       </main>
     </div>

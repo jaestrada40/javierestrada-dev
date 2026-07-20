@@ -7,7 +7,7 @@ import { AuthService } from '../../../core/services/auth.service';
   selector: 'app-login',
   imports: [FormsModule],
   template: `
-    <div class="min-h-screen flex items-center justify-center px-6 bg-slate-950">
+    <div class="admin-theme min-h-screen flex items-center justify-center px-6 bg-slate-950 text-slate-100">
       <form
         (ngSubmit)="submit()"
         class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl"
