@@ -40,6 +40,12 @@ import { AuthService } from '../../../core/services/auth.service';
           class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
           >Blog</a
         >
+        <a
+          routerLink="/admin/security"
+          routerLinkActive="bg-slate-800 text-white"
+          class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900"
+          >Seguridad</a
+        >
         <a routerLink="/" class="rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900">Ver sitio</a>
         <button
           type="button"
@@ -60,7 +66,6 @@ export class AdminLayoutComponent {
   private readonly router = inject(Router);
 
   logout(): void {
-    this.auth.logout();
-    void this.router.navigate(['/admin/login']);
+    this.auth.logout().subscribe(() => void this.router.navigate(['/admin/login']));
   }
 }

@@ -85,9 +85,14 @@ model Post {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  username String @unique
-  password String
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  password      String
+  mfaSecret     String?  @map("mfa_secret")
+  mfaEnabled    Boolean  @default(false) @map("mfa_enabled")
+  recoveryCodes String?  @map("recovery_codes")
+  tokenVersion  Int      @default(0) @map("token_version")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
   @@map("user")
 }

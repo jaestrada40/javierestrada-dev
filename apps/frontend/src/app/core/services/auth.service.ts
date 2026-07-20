@@ -1,32 +1,61 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 
-const TOKEN_KEY = 'je_token';
+export type LoginResult =
+  | { mfaRequired: false; authenticated: true }
+  | { mfaRequired: true; challengeToken: string };
+
+export interface MfaSetup {
+  secret: string;
+  qrCode: string;
+  setupToken: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
+  readonly isLoggedIn = signal(false);
 
-  readonly isLoggedIn = signal(!!localStorage.getItem(TOKEN_KEY));
-
-  get token(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+  login(username: string, password: string): Observable<LoginResult> {
+    return this.http.post<LoginResult>('/api/auth/login', { username, password }).pipe(
+      tap((result) => {
+        if (!result.mfaRequired) this.isLoggedIn.set(true);
+      }),
+    );
   }
 
-  login(username: string, password: string): Observable<{ access_token: string }> {
-    return this.http
-      .post<{ access_token: string }>('/api/auth/login', { username, password })
-      .pipe(
-        tap(({ access_token }) => {
-          localStorage.setItem(TOKEN_KEY, access_token);
-          this.isLoggedIn.set(true);
-        }),
-      );
+  verifyMfa(challengeToken: string, code: string): Observable<void> {
+    return this.http.post<void>('/api/auth/mfa/verify', { challengeToken, code }).pipe(
+      tap(() => this.isLoggedIn.set(true)),
+    );
   }
 
-  logout(): void {
-    localStorage.removeItem(TOKEN_KEY);
-    this.isLoggedIn.set(false);
+  checkSession(): Observable<boolean> {
+    return this.http.get<{ authenticated: true }>('/api/auth/session').pipe(
+      tap(() => this.isLoggedIn.set(true)),
+      map(() => true),
+      catchError(() => {
+        this.isLoggedIn.set(false);
+        return of(false);
+      }),
+    );
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<void>('/api/auth/logout', {}).pipe(
+      catchError(() => of(undefined)),
+      tap(() => this.isLoggedIn.set(false)),
+    );
+  }
+
+  setupMfa(): Observable<MfaSetup> {
+    return this.http.post<MfaSetup>('/api/auth/mfa/setup', {});
+  }
+
+  enableMfa(setupToken: string, code: string): Observable<{ recoveryCodes: string[] }> {
+    return this.http.post<{ recoveryCodes: string[] }>('/api/auth/mfa/enable', { setupToken, code }).pipe(
+      tap(() => this.isLoggedIn.set(false)),
+    );
   }
 }

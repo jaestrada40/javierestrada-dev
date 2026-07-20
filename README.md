@@ -42,8 +42,8 @@ docker compose up --build -d
 1. En Coolify: **+ New → Resource → Docker Compose**, conectar este repo de GitHub
    (`jaestrada40/javierestrada-dev`, rama `main`). Coolify detecta `docker-compose.yml`.
 2. En **Environment Variables** del recurso, definir las mismas variables de `.env.example`
-   (`POSTGRES_*`, `JWT_SECRET` nuevo con `openssl rand -hex 32`, `ADMIN_USERNAME`,
-   `ADMIN_PASSWORD` fuerte).
+   (`POSTGRES_*`, `JWT_SECRET` nuevo con `openssl rand -hex 32`, `MFA_ENCRYPTION_KEY`
+   con otra clave generada de la misma forma, `ADMIN_USERNAME` y `ADMIN_PASSWORD` fuerte).
 3. En el servicio **frontend**, asignar el dominio `javierestrada.dev` (puerto interno 80).
    Coolify emite el certificado TLS automáticamente. Quitar los `ports` públicos de
    postgres/backend si no se necesitan fuera.
@@ -60,7 +60,9 @@ crear el sitio en Umami y pegar su `<script>` de tracking en `apps/frontend/src/
 ## Panel admin
 
 `/admin` — usuario y contraseña definidos en `.env` (`ADMIN_USERNAME` / `ADMIN_PASSWORD`,
-aplicados por el seed). Desde ahí se edita el perfil, las categorías y las skills sin tocar código.
+aplicados por el seed). La sesión se guarda en una cookie `HttpOnly`, `Secure` y `SameSite=Strict`,
+con vencimiento a los 30 minutos. En **Seguridad** se puede activar MFA TOTP, compatible con las
+principales aplicaciones autenticadoras; los códigos de recuperación se muestran una sola vez.
 
 ## Tests
 

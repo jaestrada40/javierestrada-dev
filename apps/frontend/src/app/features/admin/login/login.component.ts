@@ -15,26 +15,16 @@ import { AuthService } from '../../../core/services/auth.service';
         <h1 class="text-2xl font-bold mb-1" style="font-family: var(--font-display)">Admin</h1>
         <p class="text-sm text-slate-400 mb-6">javierestrada.dev</p>
 
-        <label class="block text-sm text-slate-300 mb-1" for="username">Usuario</label>
-        <input
-          id="username"
-          name="username"
-          [(ngModel)]="username"
-          required
-          autocomplete="username"
-          class="w-full mb-4 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:outline-none focus:border-fuchsia-400"
-        />
-
-        <label class="block text-sm text-slate-300 mb-1" for="password">Contraseña</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          [(ngModel)]="password"
-          required
-          autocomplete="current-password"
-          class="w-full mb-6 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:outline-none focus:border-fuchsia-400"
-        />
+        @if (!mfaRequired()) {
+          <label class="block text-sm text-slate-300 mb-1" for="username">Usuario</label>
+          <input id="username" name="username" [(ngModel)]="username" required autocomplete="username" class="w-full mb-4 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-400" />
+          <label class="block text-sm text-slate-300 mb-1" for="password">Contraseña</label>
+          <input id="password" name="password" type="password" [(ngModel)]="password" required autocomplete="current-password" class="w-full mb-6 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 focus:outline-none focus:border-emerald-400" />
+        } @else {
+          <p class="text-sm text-slate-300 mb-4">Ingresa el código de tu aplicación autenticadora o uno de tus códigos de recuperación.</p>
+          <label class="block text-sm text-slate-300 mb-1" for="mfaCode">Código de seguridad</label>
+          <input id="mfaCode" name="mfaCode" [(ngModel)]="mfaCode" required autocomplete="one-time-code" inputmode="numeric" autofocus class="w-full mb-6 rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100 tracking-[.25em] focus:outline-none focus:border-emerald-400" />
+        }
 
         @if (error()) {
           <p class="text-sm text-rose-400 mb-4">{{ error() }}</p>
@@ -45,7 +35,7 @@ import { AuthService } from '../../../core/services/auth.service';
           [disabled]="loading()"
           class="w-full rounded-lg bg-accent py-2.5 font-semibold text-navy-950 disabled:opacity-50"
         >
-          {{ loading() ? 'Entrando…' : 'Entrar' }}
+          {{ loading() ? 'Verificando…' : mfaRequired() ? 'Verificar' : 'Entrar' }}
         </button>
       </form>
     </div>
@@ -57,14 +47,36 @@ export class LoginComponent {
 
   username = '';
   password = '';
+  mfaCode = '';
+  private challengeToken = '';
+  readonly mfaRequired = signal(false);
   readonly loading = signal(false);
   readonly error = signal('');
 
   submit(): void {
     this.loading.set(true);
     this.error.set('');
+    if (this.mfaRequired()) {
+      this.auth.verifyMfa(this.challengeToken, this.mfaCode).subscribe({
+        next: () => void this.router.navigate(['/admin']),
+        error: () => {
+          this.loading.set(false);
+          this.error.set('Código inválido o expirado');
+        },
+      });
+      return;
+    }
     this.auth.login(this.username, this.password).subscribe({
-      next: () => void this.router.navigate(['/admin']),
+      next: (result) => {
+        if (result.mfaRequired) {
+          this.challengeToken = result.challengeToken;
+          this.mfaRequired.set(true);
+          this.loading.set(false);
+          this.password = '';
+          return;
+        }
+        void this.router.navigate(['/admin']);
+      },
       error: (err: { status: number }) => {
         this.loading.set(false);
         this.error.set(err.status === 401 ? 'Credenciales inválidas' : 'Error de conexión');

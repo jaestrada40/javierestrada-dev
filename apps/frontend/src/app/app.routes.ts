@@ -64,6 +64,13 @@ export const routes: Routes = [
             (m) => m.PostsAdminComponent,
           ),
       },
+      {
+        path: 'security',
+        loadComponent: () =>
+          import('./features/admin/security/security.component').then(
+            (m) => m.SecurityComponent,
+          ),
+      },
     ],
   },
   { path: '**', redirectTo: '' },

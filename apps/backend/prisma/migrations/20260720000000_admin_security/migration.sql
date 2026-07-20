@@ -1,0 +1,6 @@
+ALTER TABLE "user"
+  ADD COLUMN "mfa_secret" TEXT,
+  ADD COLUMN "mfa_enabled" BOOLEAN NOT NULL DEFAULT false,
+  ADD COLUMN "recovery_codes" TEXT,
+  ADD COLUMN "token_version" INTEGER NOT NULL DEFAULT 0,
+  ADD COLUMN "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;
