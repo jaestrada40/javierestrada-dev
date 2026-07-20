@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../../core/services/api.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile-edit',
@@ -23,6 +24,7 @@ import { ApiService } from '../../../core/services/api.service';
             <input
               [id]="field.key"
               [formControlName]="field.key"
+              [type]="field.key === 'email' ? 'email' : field.key.includes('Url') ? 'url' : 'text'"
               class="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-slate-100 focus:outline-none focus:border-fuchsia-400"
             />
           }
@@ -38,7 +40,7 @@ import { ApiService } from '../../../core/services/api.service';
           {{ saving() ? 'Guardando…' : 'Guardar' }}
         </button>
         @if (message()) {
-          <span class="text-sm text-emerald-400">{{ message() }}</span>
+          <span class="text-sm" [class]="saveError() ? 'text-rose-400' : 'text-emerald-400'">{{ message() }}</span>
         }
       </div>
     </form>
@@ -70,6 +72,7 @@ export class ProfileEditComponent implements OnInit {
 
   readonly saving = signal(false);
   readonly message = signal('');
+  readonly saveError = signal(false);
 
   ngOnInit(): void {
     this.api.getProfile().subscribe((p) =>
@@ -88,6 +91,7 @@ export class ProfileEditComponent implements OnInit {
   save(): void {
     this.saving.set(true);
     this.message.set('');
+    this.saveError.set(false);
     const v = this.form.getRawValue();
     this.api
       .updateProfile({
@@ -95,8 +99,8 @@ export class ProfileEditComponent implements OnInit {
         tagline: v.tagline,
         bio: v.bio,
         email: v.email,
-        githubUrl: v.githubUrl || null,
-        linkedinUrl: v.linkedinUrl || null,
+        githubUrl: this.normalizeUrl(v.githubUrl),
+        linkedinUrl: this.normalizeUrl(v.linkedinUrl),
         avatarUrl: v.avatarUrl || null,
       })
       .subscribe({
@@ -104,10 +108,23 @@ export class ProfileEditComponent implements OnInit {
           this.saving.set(false);
           this.message.set('✓ Guardado');
         },
-        error: () => {
+        error: (error: HttpErrorResponse) => {
           this.saving.set(false);
-          this.message.set('Error al guardar');
+          this.saveError.set(true);
+          this.message.set(
+            error.status === 401
+              ? 'Tu sesión expiró. Sal y vuelve a ingresar.'
+              : error.status === 400
+                ? 'Revisa que los enlaces y el correo tengan un formato válido.'
+                : 'No se pudo guardar. Intenta nuevamente.',
+          );
         },
       });
+  }
+
+  private normalizeUrl(value: string): string | null {
+    const normalized = value.trim();
+    if (!normalized) return null;
+    return /^https?:\/\//i.test(normalized) ? normalized : `https://${normalized}`;
   }
 }

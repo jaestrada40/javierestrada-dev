@@ -1,4 +1,4 @@
-import { IsEmail, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsEmail, IsOptional, IsString, IsUrl, Matches } from 'class-validator';
 
 export class UpdateProfileDto {
   @IsOptional()
@@ -26,6 +26,9 @@ export class UpdateProfileDto {
   linkedinUrl?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
+  @Matches(/^(?:\/[a-zA-Z0-9][a-zA-Z0-9._/-]*|https:\/\/[^\s]+)$/, {
+    message: 'avatarUrl debe ser una ruta local segura o una URL HTTPS',
+  })
   avatarUrl?: string;
 }
