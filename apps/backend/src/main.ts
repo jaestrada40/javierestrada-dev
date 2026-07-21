@@ -10,10 +10,22 @@ async function bootstrap(): Promise<void> {
   // Detrás de nginx/Coolify: respetar X-Forwarded-For para throttling por IP real
   app.set('trust proxy', 1);
   app.use(helmet());
-  const allowedOrigins = process.env.CORS_ORIGINS?.split(',').map((item) => item.trim()) ?? [
+  const configuredOrigins = (process.env.CORS_ORIGINS ?? '')
+    .split(',')
+    .map((item) => item.trim().replace(/^["']|["']$/g, ''))
+    .filter(Boolean);
+  const allowedOrigins = Array.from(new Set([
     'https://javierestrada.dev',
+    'https://www.javierestrada.dev',
     'http://localhost:4200',
-  ];
+    ...configuredOrigins,
+  ].map((item) => {
+    try {
+      return new URL(item).origin;
+    } catch {
+      return item.replace(/\/$/, '');
+    }
+  })));
   app.use((request: Request, response: Response, next: NextFunction) => {
     if (
       process.env.NODE_ENV === 'production' &&
