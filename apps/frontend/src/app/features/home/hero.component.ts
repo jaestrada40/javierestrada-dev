@@ -70,7 +70,7 @@ import { LanguageService } from '../../core/services/language.service';
           <div class="w-60 h-60 md:w-72 md:h-72 rounded-full bg-accent-soft p-3 ring-1 ring-navy-700 shadow-[0_24px_70px_rgba(28,70,55,.13)]">
             @if (profile().avatarUrl) {<img [src]="profile().avatarUrl" [alt]="profile().name" class="w-full h-full rounded-full object-cover" />} @else {<div class="w-full h-full rounded-full grid place-items-center font-display text-6xl text-accent">JE</div>}
           </div>
-          <p class="font-mono text-xs text-ink-dim text-center mt-5">{{ profile().tagline }}</p>
+          <p class="font-mono text-xs text-ink-dim text-center mt-5">{{ language.pick(profile().tagline, profile().taglineEn) }}</p>
         </div>
       </div>
     </header>
