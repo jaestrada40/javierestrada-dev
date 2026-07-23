@@ -11,7 +11,15 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsString()
+  taglineEn?: string;
+
+  @IsOptional()
+  @IsString()
   bio?: string;
+
+  @IsOptional()
+  @IsString()
+  bioEn?: string;
 
   @IsOptional()
   @IsEmail()

@@ -8,6 +8,10 @@ export class CreateProjectDto {
   @IsString()
   description!: string;
 
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
+
   @IsString()
   stack!: string;
 
@@ -37,6 +41,10 @@ export class UpdateProjectDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @IsOptional()
   @IsString()

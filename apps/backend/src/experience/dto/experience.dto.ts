@@ -8,6 +8,10 @@ export class CreateExperienceDto {
   @MinLength(1)
   title!: string;
 
+  @IsOptional()
+  @IsString()
+  titleEn?: string;
+
   @IsString()
   @MinLength(1)
   organization!: string;
@@ -21,6 +25,10 @@ export class CreateExperienceDto {
 
   @IsString()
   description!: string;
+
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @IsOptional()
   @IsInt()
@@ -39,6 +47,10 @@ export class UpdateExperienceDto {
 
   @IsOptional()
   @IsString()
+  titleEn?: string;
+
+  @IsOptional()
+  @IsString()
   @MinLength(1)
   organization?: string;
 
@@ -53,6 +65,10 @@ export class UpdateExperienceDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsString()
+  descriptionEn?: string;
 
   @IsOptional()
   @IsInt()
