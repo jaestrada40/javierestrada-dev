@@ -31,6 +31,34 @@ import { HttpErrorResponse } from '@angular/common/http';
         </div>
       }
 
+      <div class="border-t border-slate-800 pt-4 grid gap-4">
+        <p class="font-mono text-xs uppercase tracking-widest text-slate-500">Versión en inglés</p>
+        @for (field of translatableFields; track field.key) {
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="block text-sm text-slate-300" [for]="field.enKey">{{ field.label }} (EN)</label>
+              <button
+                type="button"
+                (click)="translateField(field)"
+                [disabled]="translating() === field.key"
+                class="text-xs text-emerald-400 hover:underline disabled:opacity-50"
+              >
+                {{ translating() === field.key ? 'Traduciendo…' : 'Traducir a inglés' }}
+              </button>
+            </div>
+            <textarea
+              [id]="field.enKey"
+              [formControlName]="field.enKey"
+              rows="3"
+              class="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-slate-100 focus:outline-none focus:border-fuchsia-400"
+            ></textarea>
+          </div>
+        }
+        @if (translateError()) {
+          <p class="text-sm text-rose-400">{{ translateError() }}</p>
+        }
+      </div>
+
       <div class="flex items-center gap-4 mt-2">
         <button
           type="submit"
@@ -60,10 +88,17 @@ export class ProfileEditComponent implements OnInit {
     { key: 'avatarUrl', label: 'Avatar URL' },
   ] as const;
 
+  readonly translatableFields = [
+    { key: 'tagline' as const, enKey: 'taglineEn' as const, label: 'Tagline' },
+    { key: 'bio' as const, enKey: 'bioEn' as const, label: 'Bio' },
+  ];
+
   readonly form = this.fb.nonNullable.group({
     name: ['', Validators.required],
     tagline: ['', Validators.required],
+    taglineEn: [''],
     bio: ['', Validators.required],
+    bioEn: [''],
     email: ['', [Validators.required, Validators.email]],
     githubUrl: [''],
     linkedinUrl: [''],
@@ -73,19 +108,40 @@ export class ProfileEditComponent implements OnInit {
   readonly saving = signal(false);
   readonly message = signal('');
   readonly saveError = signal(false);
+  readonly translating = signal<string | null>(null);
+  readonly translateError = signal('');
 
   ngOnInit(): void {
     this.api.getProfile().subscribe((p) =>
       this.form.patchValue({
         name: p.name,
         tagline: p.tagline,
+        taglineEn: p.taglineEn ?? '',
         bio: p.bio,
+        bioEn: p.bioEn ?? '',
         email: p.email,
         githubUrl: p.githubUrl ?? '',
         linkedinUrl: p.linkedinUrl ?? '',
         avatarUrl: p.avatarUrl ?? '',
       }),
     );
+  }
+
+  translateField(field: { key: 'tagline' | 'bio'; enKey: 'taglineEn' | 'bioEn' }): void {
+    const text = this.form.controls[field.key].value.trim();
+    if (!text) return;
+    this.translating.set(field.key);
+    this.translateError.set('');
+    this.api.translate(text).subscribe({
+      next: ({ translated }) => {
+        this.form.controls[field.enKey].setValue(translated);
+        this.translating.set(null);
+      },
+      error: () => {
+        this.translating.set(null);
+        this.translateError.set('No se pudo traducir, inténtalo de nuevo.');
+      },
+    });
   }
 
   save(): void {
@@ -97,7 +153,9 @@ export class ProfileEditComponent implements OnInit {
       .updateProfile({
         name: v.name,
         tagline: v.tagline,
+        taglineEn: v.taglineEn || null,
         bio: v.bio,
+        bioEn: v.bioEn || null,
         email: v.email,
         githubUrl: this.normalizeUrl(v.githubUrl),
         linkedinUrl: this.normalizeUrl(v.linkedinUrl),
