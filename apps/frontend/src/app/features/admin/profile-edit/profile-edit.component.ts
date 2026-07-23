@@ -128,6 +128,7 @@ export class ProfileEditComponent implements OnInit {
   }
 
   translateField(field: { key: 'tagline' | 'bio'; enKey: 'taglineEn' | 'bioEn' }): void {
+    if (this.translating()) return;
     const text = this.form.controls[field.key].value.trim();
     if (!text) return;
     this.translating.set(field.key);
