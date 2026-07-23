@@ -5,7 +5,8 @@ const STORAGE_KEY = 'lang';
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
-  readonly lang = signal<'es' | 'en'>(this.readStored());
+  private readonly _lang = signal<'es' | 'en'>(this.readStored());
+  readonly lang = this._lang.asReadonly();
 
   private readStored(): 'es' | 'en' {
     const stored = typeof localStorage !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
@@ -13,8 +14,8 @@ export class LanguageService {
   }
 
   toggle(): void {
-    const next = this.lang() === 'es' ? 'en' : 'es';
-    this.lang.set(next);
+    const next = this._lang() === 'es' ? 'en' : 'es';
+    this._lang.set(next);
     localStorage.setItem(STORAGE_KEY, next);
   }
 
