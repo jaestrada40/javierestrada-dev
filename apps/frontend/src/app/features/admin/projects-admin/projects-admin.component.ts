@@ -7,6 +7,7 @@ interface ProjectForm {
   id: number | null;
   name: string;
   description: string;
+  descriptionEn: string;
   stack: string;
   githubUrl: string;
   demoUrl: string;
@@ -15,7 +16,7 @@ interface ProjectForm {
 }
 
 const EMPTY: ProjectForm = {
-  id: null, name: '', description: '', stack: '',
+  id: null, name: '', description: '', descriptionEn: '', stack: '',
   githubUrl: '', demoUrl: '', featured: false, sortOrder: 0,
 };
 
@@ -31,6 +32,18 @@ const EMPTY: ProjectForm = {
       </p>
       <input name="name" [(ngModel)]="form.name" placeholder="Nombre" required class="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2" />
       <textarea name="description" [(ngModel)]="form.description" placeholder="Descripción" rows="3" required class="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2"></textarea>
+
+      <div class="border-t border-navy-700/60 pt-3 grid gap-2">
+        <div class="flex items-center justify-between">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-ink-dim">Descripción (EN)</p>
+          <button type="button" (click)="translateDescription()" [disabled]="translating()" class="text-xs text-accent hover:underline disabled:opacity-50">
+            {{ translating() ? 'Traduciendo…' : 'Traducir a inglés' }}
+          </button>
+        </div>
+        <textarea name="descriptionEn" [(ngModel)]="form.descriptionEn" placeholder="Description" rows="3" class="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2"></textarea>
+        @if (translateError()) { <p class="text-sm text-rose-400">{{ translateError() }}</p> }
+      </div>
+
       <input name="stack" [(ngModel)]="form.stack" placeholder="Stack (separado por comas)" required class="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2" />
       <div class="grid grid-cols-2 gap-3">
         <input name="githubUrl" [(ngModel)]="form.githubUrl" placeholder="GitHub URL (opcional)" class="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2" />
@@ -74,6 +87,8 @@ export class ProjectsAdminComponent implements OnInit {
 
   readonly projects = signal<Project[]>([]);
   readonly message = signal('');
+  readonly translating = signal(false);
+  readonly translateError = signal('');
   form: ProjectForm = { ...EMPTY };
 
   ngOnInit(): void {
@@ -98,6 +113,7 @@ export class ProjectsAdminComponent implements OnInit {
       id: project.id,
       name: project.name,
       description: project.description,
+      descriptionEn: project.descriptionEn ?? '',
       stack: project.stack,
       githubUrl: project.githubUrl ?? '',
       demoUrl: project.demoUrl ?? '',
@@ -106,10 +122,29 @@ export class ProjectsAdminComponent implements OnInit {
     };
   }
 
+  translateDescription(): void {
+    if (this.translating()) return;
+    const text = this.form.description.trim();
+    if (!text) return;
+    this.translating.set(true);
+    this.translateError.set('');
+    this.api.translate(text).subscribe({
+      next: ({ translated }) => {
+        this.form.descriptionEn = translated;
+        this.translating.set(false);
+      },
+      error: () => {
+        this.translating.set(false);
+        this.translateError.set('No se pudo traducir, inténtalo de nuevo.');
+      },
+    });
+  }
+
   save(): void {
     const data = {
       name: this.form.name.trim(),
       description: this.form.description,
+      descriptionEn: this.form.descriptionEn.trim() || undefined,
       stack: this.form.stack,
       githubUrl: this.form.githubUrl.trim() || undefined,
       demoUrl: this.form.demoUrl.trim() || undefined,
