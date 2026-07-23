@@ -1,6 +1,7 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Project } from '../../models';
 import { RevealDirective } from '../../shared/reveal.directive';
+import { LanguageService } from '../../core/services/language.service';
 
 @Component({
   selector: 'app-projects-section',
@@ -8,7 +9,13 @@ import { RevealDirective } from '../../shared/reveal.directive';
   template: `
     @if (projects().length) {
       <section id="proyectos" class="max-w-6xl mx-auto px-6 py-16">
-        <div class="flex items-end justify-between gap-6 mb-10"><div><p class="font-mono text-xs text-accent tracking-[.2em] uppercase mb-3">Trabajo reciente</p><h2 class="font-display font-bold text-3xl tracking-tight">Proyectos seleccionados</h2></div><span class="hidden sm:block font-mono text-xs text-ink-dim">Diseño · Código · Producción</span></div>
+        <div class="flex items-end justify-between gap-6 mb-10">
+          <div>
+            <p class="font-mono text-xs text-accent tracking-[.2em] uppercase mb-3">{{ language.t('projects.eyebrow') }}</p>
+            <h2 class="font-display font-bold text-3xl tracking-tight">{{ language.t('projects.heading') }}</h2>
+          </div>
+          <span class="hidden sm:block font-mono text-xs text-ink-dim">Diseño · Código · Producción</span>
+        </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           @for (project of projects(); track project.id) {
@@ -21,11 +28,11 @@ import { RevealDirective } from '../../shared/reveal.directive';
                   {{ project.name }}
                 </h3>
                 @if (project.featured) {
-                  <span class="font-mono text-[10px] uppercase tracking-wider text-accent bg-accent-soft rounded-full px-2.5 py-1 shrink-0">Destacado</span>
+                  <span class="font-mono text-[10px] uppercase tracking-wider text-accent bg-accent-soft rounded-full px-2.5 py-1 shrink-0">{{ language.t('projects.featured') }}</span>
                 }
               </div>
 
-              <p class="text-ink-dim text-sm leading-relaxed flex-1">{{ project.description }}</p>
+              <p class="text-ink-dim text-sm leading-relaxed flex-1">{{ language.pick(project.description, project.descriptionEn) }}</p>
 
               <div class="mt-4 flex flex-wrap gap-2">
                 @for (tech of stackList(project); track tech) {
@@ -35,10 +42,10 @@ import { RevealDirective } from '../../shared/reveal.directive';
 
               <div class="mt-5 flex gap-4 font-mono text-sm">
                 @if (project.githubUrl) {
-                  <a [href]="project.githubUrl" target="_blank" rel="noopener" class="text-accent hover:underline">Código →</a>
+                  <a [href]="project.githubUrl" target="_blank" rel="noopener" class="text-accent hover:underline">{{ language.t('projects.code') }}</a>
                 }
                 @if (project.demoUrl) {
-                  <a [href]="project.demoUrl" target="_blank" rel="noopener" class="text-accent hover:underline">Demo →</a>
+                  <a [href]="project.demoUrl" target="_blank" rel="noopener" class="text-accent hover:underline">{{ language.t('projects.demo') }}</a>
                 }
               </div>
             </article>
@@ -50,6 +57,7 @@ import { RevealDirective } from '../../shared/reveal.directive';
 })
 export class ProjectsSectionComponent {
   readonly projects = input.required<Project[]>();
+  readonly language = inject(LanguageService);
 
   stackList(project: Project): string[] {
     return project.stack.split(',').map((s) => s.trim()).filter(Boolean);
