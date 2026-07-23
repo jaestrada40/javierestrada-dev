@@ -54,9 +54,9 @@ export class ApiService {
   }
 
   updateProject(id: number, data: Partial<Project>): Observable<Project> {
-    const { name, description, stack, githubUrl, demoUrl, featured, sortOrder } = data;
+    const { name, description, descriptionEn, stack, githubUrl, demoUrl, featured, sortOrder } = data;
     return this.http.patch<Project>(`/api/projects/${id}`, {
-      name, description, stack,
+      name, description, descriptionEn, stack,
       githubUrl: githubUrl || undefined,
       demoUrl: demoUrl || undefined,
       featured, sortOrder,
@@ -76,11 +76,11 @@ export class ApiService {
   }
 
   updateExperience(id: number, data: Partial<Experience>): Observable<Experience> {
-    const { kind, title, organization, startYear, endYear, description, sortOrder } = data;
+    const { kind, title, titleEn, organization, startYear, endYear, description, descriptionEn, sortOrder } = data;
     return this.http.patch<Experience>(`/api/experience/${id}`, {
-      kind, title, organization, startYear,
+      kind, title, titleEn, organization, startYear,
       endYear: endYear ?? undefined,
-      description, sortOrder,
+      description, descriptionEn, sortOrder,
     });
   }
 
@@ -111,5 +111,9 @@ export class ApiService {
 
   deletePost(id: number): Observable<Post> {
     return this.http.delete<Post>(`/api/posts/${id}`);
+  }
+
+  translate(text: string): Observable<{ translated: string }> {
+    return this.http.post<{ translated: string }>('/api/translate', { text });
   }
 }

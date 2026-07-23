@@ -2,7 +2,9 @@ export interface Profile {
   id: number;
   name: string;
   tagline: string;
+  taglineEn: string | null;
   bio: string;
+  bioEn: string | null;
   email: string;
   githubUrl: string | null;
   linkedinUrl: string | null;
@@ -31,6 +33,7 @@ export interface Project {
   id: number;
   name: string;
   description: string;
+  descriptionEn: string | null;
   stack: string;
   githubUrl: string | null;
   demoUrl: string | null;
@@ -42,10 +45,12 @@ export interface Experience {
   id: number;
   kind: 'work' | 'education';
   title: string;
+  titleEn: string | null;
   organization: string;
   startYear: number;
   endYear: number | null;
   description: string;
+  descriptionEn: string | null;
   sortOrder: number;
 }
 
