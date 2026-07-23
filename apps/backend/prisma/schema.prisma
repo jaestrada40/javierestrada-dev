@@ -11,7 +11,9 @@ model Profile {
   id          Int      @id @default(autoincrement())
   name        String
   tagline     String
+  taglineEn   String?  @map("tagline_en")
   bio         String
+  bioEn       String?  @map("bio_en")
   email       String
   githubUrl   String?  @map("github_url")
   linkedinUrl String?  @map("linkedin_url")
@@ -48,6 +50,7 @@ model Project {
   id          Int     @id @default(autoincrement())
   name        String
   description String
+  descriptionEn String? @map("description_en")
   stack       String  // tecnologías separadas por coma
   githubUrl   String? @map("github_url")
   demoUrl     String? @map("demo_url")
@@ -61,10 +64,12 @@ model Experience {
   id           Int     @id @default(autoincrement())
   kind         String  // "work" | "education"
   title        String
+  titleEn      String? @map("title_en")
   organization String
   startYear    Int     @map("start_year")
   endYear      Int?    @map("end_year") // null = actualidad
   description  String
+  descriptionEn String? @map("description_en")
   sortOrder    Int     @default(0) @map("sort_order")
 
   @@map("experience")
